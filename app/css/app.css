@@ -1,0 +1,27 @@
+/* app css stylesheet */
+/*.container-fluid > .form-search {*/
+    /*text-align: left;*/
+/*}*/
+
+.form-search button {
+    width: 6em;
+}
+
+#query {
+    width: 60%;
+}
+
+.search-result {
+    background-color: #eae9ff;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+.search-result p {
+    margin: 0;
+    font-size: 12px;
+}
+
+li.g {margin-top:0; margin-bottom: 20px; }
+
+footer p { text-align: center; }

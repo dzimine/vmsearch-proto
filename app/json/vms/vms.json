@@ -1,0 +1,36 @@
+[
+   {
+      "name" :  "My Cool VM",
+      "id":  "550e8400-e29b-41d4-a716-446655440000",
+      "ip": ["10.20.30.40","192.168.1.101"],
+      "power": "on",
+      "user":  "Dmitri",
+      "project": "Tenant 1",
+      "host":  "dc1-host1",
+      "health": 30,
+      "storage_total": 10,
+      "storage_use": 9,
+      "cpu_use_ave": 44,
+      "memory_total": 1024,
+      "memory_use_ave": 922,
+      "tags": ["folder", "Monster", "MarkedForDeletion", "Apache webapp"],
+      "notes":" Although some members were designated by statute, for the most part the commission, which was freshly appointed each year, consisted of prominent Americans, including numismatists..."
+   },
+   {
+      "name" :  "vm dev 01",
+      "id":  "550e8400-e29b-41d4-a716-446655440001",
+      "ip": ["10.20.30.41"],
+      "power": "off",
+      "user":  "Dmitri",
+      "project": "Tenant 1",
+      "host":  "dc1-host1",
+      "health": 100,
+      "storage_total": 10,
+      "storage_use": 9,
+      "cpu_use_ave": 44,
+      "memory_total": 2048,
+      "memory_use_ave": 1922,
+      "tags": ["folder", "Monster", "LAMP"],
+      "note":" Preserving the document relationship allows documents to be updated independently without having to reindex large numbers of denormalized documents."
+   }
+]

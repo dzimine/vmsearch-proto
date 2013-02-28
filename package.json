@@ -1,0 +1,13 @@
+{
+  "name": "Cassandra",
+  "description": "DZ is playing with cassandra",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+     "cassandra-client": "0.x",
+     "solr-client": ">=0.2.x",
+	  "express": "3.x",
+     "whiskey": ">= 0.6.11",
+     "async": ">= 0.2.5"
+  }
+}
