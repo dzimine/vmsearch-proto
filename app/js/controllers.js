@@ -3,7 +3,11 @@
 var NavCtrl = ['$scope', '$location', function ($s, $loc) {
    $s.isActiveLocation = function (route) {
       return route === $loc.path();
-   }
+   };
+
+   $s.tags = function() {
+      return ["SolarWinds","Network Monitoring", "Application", "Performance", "Monitor", "Orion", "Management", "Apache", "Video", "Virt", "ESX", "iSCSI", "Cisco", "LAMP", "Production", "Testing", "FIXME" ];
+   };
    // Notice an alternative way to trigger injection .
 }];
 
@@ -22,7 +26,7 @@ function SearchCtrl($s, $http) {
             });
    }
 
-   //On load;
+   //On load
    fetch("data/vms");
 
    $s.loadMore = function () {
@@ -35,8 +39,8 @@ function SearchCtrl($s, $http) {
          $s.searchResults = rows;
       });
    };
-
    //TODO-MAYBE: consider more on scroll, like here http://jsfiddle.net/vojtajina/U7Bz9/
+
 }
 
 // Force Inject to handle minimizer and use any params in controller sig.

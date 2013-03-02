@@ -1,37 +1,33 @@
-<div class="row-fluid" ng-controller="SearchCtrl">
-   <div class="span1"></div>
-   <div class="span11">
-      <form class="form-search" ng-submit="onSearch()">
-         <!-- TODO: add image -->
-         <input type="text" id="query" ng-model="query" class="input-medium search-query" placeholder="Search...">
-         <button type="submit" class="btn btn-primary" ><i class="icon-search icon-white"></i></button>
-      </form>
-      <hr>
-      <ul class="unstyled">
-         <li>
-            <div class="search-result">
-               <h5><a>Mock VM data</a></h5>
-               <p>IP:<a>10.20.30.40</a>, Power: ON, User: <a>Dmitri</a>, Host:<a>192.168.1.101</a></p>
-               <p>Storage: 40Gb(20Gb free); CPU average: 44%; Mem: 4Gb, average use 4%</p>
-               <p>Tags: <a>Folder-a</a>, <a>Monster</a>,<a>ToBeDeleted</a>, <a>Apache webapp</a></p>
-               <p>Note: Although some members were designated by statute, for the most part the commission, which was freshly appointed each year, consisted of prominent Americans, including numismatists...</p>
-            </div>
-         </li>
-         <li>
-            <div class="search-result">
-               <h5>My super cool vm VM</h5>
-               <p>here goes the text</p>
-            </div>
-         </li>
-      </ul>
-      <ul class="unstyled">
-         <li ng-repeat="r in searchResults">
-            <div class="search-result"><h5><a>{{r.name}}</a></h5>
-               <pre>{{ r }}</pre>
-            </div>
-         </li>
-      </ul>
 
-      <p class="lead"><a ng-click="loadMore()"><strong>Next {{limit}} ...</strong></a></p>
-   </div><!--/span11-->
-</div><!--/row-->
+<form class="form-search" ng-submit="onSearch()">
+   <!-- TODO: add image -->
+   <input type="text" id="query" ng-model="query" class="input-medium search-query" placeholder="Search...">
+   <button type="submit" class="btn btn-primary" ><i class="icon-search icon-white"></i></button>
+</form>
+<hr>
+<ul class="unstyled">
+   <li>
+      <div class="search-result">
+         <h5><a>Mock VM data</a></h5>
+         <p>IP:<a>10.20.30.40</a>, Power: ON, User: <a>Dmitri</a>, Host:<a>192.168.1.101</a></p>
+         <p>Storage: 40Gb(20Gb free); CPU average: 44%; Mem: 4Gb, average use 4%</p>
+         <p>Tags: <a>Folder-a</a>, <a>Monster</a>,<a>ToBeDeleted</a>, <a>Apache webapp</a></p>
+         <p>Note: Although some members were designated by statute, for the most part the commission, which was freshly appointed each year, consisted of prominent Americans, including numismatists...</p>
+      </div>
+   </li>
+   <li>
+      <div class="search-result">
+         <h5>My super cool vm VM</h5>
+         <p>here goes the text</p>
+      </div>
+   </li>
+</ul>
+<ul class="unstyled">
+   <li ng-repeat="r in searchResults">
+      <div class="search-result"><h5><a>{{r.name}}</a></h5>
+         <pre>{{ r }}</pre>
+      </div>
+   </li>
+</ul>
+
+<p class="lead"><a ng-click="loadMore()"><strong>Next {{limit}} ...</strong></a></p>

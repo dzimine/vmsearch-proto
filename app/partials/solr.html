@@ -1,23 +1,19 @@
-<div class="row-fluid" ng-controller="SearchSolrCtrl">
-   <div class="span1"></div>
-   <div class="span11">
-      <form class="form-search" ng-submit="onSearch()">
-         <!-- TODO: add image -->
-         <input type="text" id="query" ng-model="query" class="input-medium search-query" placeholder="Search...">
-         <button type="submit" class="btn btn-primary" ><i class="icon-search icon-white"></i></button>
-      </form>
-      <hr>
-      <ul class="unstyled">
-         <!-- Mock vms go here -->
-      </ul>
-      <ul class="unstyled">
-         <li ng-repeat="r in searchResults">
-            <div class="search-result"><h5><a>{{r.name}}</a></h5>
-               <pre>{{ r }}</pre>
-            </div>
-         </li>
-      </ul>
 
-      <p class="lead" ng-show="moreResults"><a ng-click="loadMore()"><strong>Next {{limit}} ...</strong></a></p>
-   </div><!--/span11-->
-</div><!--/row-->
+<form class="form-search" ng-submit="onSearch()">
+   <!-- TODO: add image -->
+   <input type="text" id="query" ng-model="query" class="input-medium search-query" placeholder="Search...">
+   <button type="submit" class="btn btn-primary" ><i class="icon-search icon-white"></i></button>
+</form>
+<hr>
+<ul class="unstyled">
+   <!-- Mock vms go here -->
+</ul>
+<ul class="unstyled">
+   <li ng-repeat="r in searchResults">
+      <div class="search-result"><h5><a>{{r.name}}</a></h5>
+         <pre>{{ r }}</pre>
+      </div>
+   </li>
+</ul>
+
+<p class="lead" ng-show="moreResults"><a ng-click="loadMore()"><strong>Next {{limit}} ...</strong></a></p>

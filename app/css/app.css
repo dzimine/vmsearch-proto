@@ -1,10 +1,30 @@
 /* app css stylesheet */
-/*.container-fluid > .form-search {*/
-    /*text-align: left;*/
-/*}*/
 
-.form-search button {
-    width: 6em;
+.well {
+   padding:10px;
+}
+.well .nav-header {
+   padding-left: 0;
+}
+
+#f-list .badge {
+   float:right;
+   font-weight: normal;
+}
+
+#f-list .nav-pills.nav-stacked > li > a {
+   padding-right: 5px;
+}
+
+#nav-filter {
+   font-size: 11px;
+   height:12px;
+   width: 80px;
+}
+
+#host-list {
+   max-height: 300px;
+   overflow: auto;
 }
 
 #query {
@@ -24,4 +44,6 @@
 
 li.g {margin-top:0; margin-bottom: 20px; }
 
-footer p { text-align: center; }
+footer p {
+   text-align: center;
+}
