@@ -69,7 +69,7 @@
             <div id="f-list">
                <ul class="nav nav-pills nav-stacked">
                   <li ng-repeat="f in facets" ng-class="{'active': f.facet==facetSelected}">
-                     <a href="#" ng-click="selectFacet(f.facet)">{{f.facet}}
+                     <a ng-click="selectFacet(f.facet)">{{f.facet}}
                         <span class="badge">{{f.count}}</span>
                      </a>
                   </li>
