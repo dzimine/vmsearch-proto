@@ -1,14 +1,34 @@
 'use strict';
 
 var NavCtrl = ['$scope', '$location', function ($s, $loc) {
+   // Notice an alternative way to trigger injection .
+
    $s.isActiveLocation = function (route) {
       return route === $loc.path();
    };
 
-   $s.tags = function() {
-      return ["SolarWinds","Network Monitoring", "Application", "Performance", "Monitor", "Orion", "Management", "Apache", "Video", "Virt", "ESX", "iSCSI", "Cisco", "LAMP", "Production", "Testing", "FIXME" ];
+   //TEMP, for mock data
+   var facetMap= {
+      "Tags"  : ["SolarWinds","Network Monitoring", "Application", "Performance", "Monitor", "Orion", "Management", "Apache", "Video", "Virt", "ESX", "iSCSI", "Cisco", "LAMP", "Production", "Testing", "FIXME" ],
+      "Hosts" : ["host1", "host2", "10.20.30.40", "dzimine-dev-ubuntu"]
    };
-   // Notice an alternative way to trigger injection .
+
+   //TODO: get from backend
+   $s.facets = [{facet: "Tags", count: 100}, {facet: "Hosts", count:100000}];
+
+   $s.selectFacet = function (facet) {
+      if (facet == $s.selectedFacet) return;
+      $s.facetSelected = facet;
+      $s.facetItems = facetMap[$s.facetSelected];
+   };
+
+   $s.selectFacet($s.facets[0].facet);
+
+   $s.selectFacetItem = function (item) {
+      if (item == $s.facetItemSelected) return;
+      $s.facetItemSelected = item;
+   }
+
 }];
 
 function SearchCtrl($s, $http) {

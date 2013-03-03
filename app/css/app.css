@@ -22,6 +22,10 @@
    width: 80px;
 }
 
+#f-results {
+   padding-top: 3px;
+}
+
 #host-list {
    max-height: 300px;
    overflow: auto;
