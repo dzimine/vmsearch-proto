@@ -1,6 +1,7 @@
 'use strict';
+
 var NavCtrl = ['$scope', '$location', function ($s, $loc) {
-   // Notice an alternative way to trigger injection .
+// Notice an alternative way to trigger injection. But it generates jslint warning.
 
    $s.isActiveLocation = function (route) {
       return route === $loc.path();
@@ -9,14 +10,13 @@ var NavCtrl = ['$scope', '$location', function ($s, $loc) {
 }];
 
 function FacetSolrCtrl($s, $http) {
-   //TEMP, for mock data
+
    var facetMap= undefined;
 //   For testing... TODO: move test data to json/facets
 //   {
 //      "tags"  : ["SolarWinds","Network Monitoring", "Application", "Performance", "Monitor", "Orion", "Management", "Apache", "Video", "Virt", "ESX", "iSCSI", "Cisco", "LAMP", "Production", "Testing", "FIXME" ],
 //      "host" : ["host1", "host2", "10.20.30.40", "dzimine-dev-ubuntu"]
 //   };
-
 
    $s.facets = [{facet: "tags",  label:"Tags"}, {facet: "host", label:"Hosts"}];
 
@@ -68,12 +68,14 @@ function SearchCtrl($s, $http) {
    $s.lastKey=undefined;
 
    function fetch (url){
-
+      var t1 = new Date();
       $http.get(url, {params: {"k":$s.lastKey, "l":$s.limit} })
             .success(function(rows) {
                $s.searchResults = $s.searchResults.concat(rows);
                $s.lastKey = rows[rows.length-1].name;
+               $s.elapsedTime = new Date() - t1;
             });
+
    }
 
    //On load
@@ -84,19 +86,16 @@ function SearchCtrl($s, $http) {
    };
 
    $s.onSearch = function () {
-      //FIXME: secuity problem. Must sanitize query.
+      //FIXME: security problem, CQL injection? Must sanitize query.
       $http.get("data/vms/" + $s.query).success(function (rows) {
          $s.searchResults = rows;
       });
    };
    //TODO-MAYBE: consider more on scroll, like here http://jsfiddle.net/vojtajina/U7Bz9/
-
 }
-
 // Force Inject to handle minimizer and use any params in controller sig.
 SearchCtrl.$inject = ['$scope', '$http'];
 
-// TODO: refactor!!!!! rith now this is a DIRTY COPY PASTE from SearchCtrl.
 function SearchSolrCtrl($s, $http) {
 
    function ready() {
@@ -106,14 +105,16 @@ function SearchSolrCtrl($s, $http) {
       $s.moreResults = false;
    }
 
-
    function fetch (url){
-
-      $http.get(url, {params: {"k":$s.start, "l":$s.limit, "q":$s.query} })
-            .success(function(rows) {
+      var t1 = new Date();
+      $http.get(url, {params: {"k":$s.start, "l":$s.limit, q: $s.query} })
+            .success(function(res) {
+               var rows = res.docs;
                $s.searchResults = $s.searchResults.concat(rows);
                $s.start += rows.length;
                $s.moreResults = $s.limit <= rows.length;
+               $s.numFound = res.numFound;
+               $s.elapsedTime = new Date() - t1;
             });
    }
 
@@ -130,10 +131,6 @@ function SearchSolrCtrl($s, $http) {
       fetch("solr/vms");
    };
 
-   //TODO-MAYBE: consider more on scroll, like here http://jsfiddle.net/vojtajina/U7Bz9/
-}
-
-// Force Inject to handle minimizer and use any params in controller sig.
-SearchSolrCtrl.$inject = ['$scope', '$http'];
+} SearchSolrCtrl.$inject = ['$scope', '$http'];
 
 

@@ -23,9 +23,8 @@ var getAll = exports.getAll = function(req, res, next) {
          next(err);
       } else {
          console.log(result.response.numFound, " records found");
-
          console.log(result.response.docs.length);
-         res.json(result.response.docs);
+         res.json(result.response);
       }
    });
 };
@@ -38,9 +37,9 @@ var getAll = exports.getAll = function(req, res, next) {
          &f.host.facet.limit=10 - bring only 10 first
          &f.host.sort=index - sort by alpha (default by counts)
       &facet.field=tags" - tags field facet
-      //TODO add parameters for search
  */
 var getFacets = exports.getFacets = function (req, res, next) {
+   // TODO:add parameters for search, it's hardcoded.
    var query = "q=*:*&rows=0&facet=true&facet.field=host&f.host.facet.limit=10&facet.field=tags";
    solrClient.search(query, function(err, result) {
       if(err) {

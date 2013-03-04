@@ -21,7 +21,7 @@ function makeUpdateQuery(vm) {
    var params = [];
    for (var key in vm)
    {
-      //TODO: Handle multiple values!!!
+      //TODO: Handle multiple values!!! Like, list of IPs, as a super-column.
       params.push("'" + key + "'='" + vm[key] + "'");
    }
    var query = "UPDATE vms SET " + params + " WHERE key='" + vm.name + "'";
@@ -79,7 +79,6 @@ async.waterfall(
 
       ],
       // Step3. Commit on success, or roll-back on error(s)
-      // TODO: strange but "commit" is called for each batch separately. Why?
       function (err, res) {
          if(err) {
             console.log(err);

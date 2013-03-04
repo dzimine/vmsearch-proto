@@ -17,7 +17,7 @@ var getVm = exports.getVm = function() {
       vm.ip.push(generateIp());
    }
    vm.power = powerState();
-   //TODO: mix it up, to get N vm per user, M per project.
+   //TODO: mix up User and Project, to get N vm per user, M per project.
    vm.user = "Knight";
    vm.project = "Tenant 1";
    vm.host = generateHostName();

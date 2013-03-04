@@ -17,7 +17,7 @@ async.waterfall(
    [
       // Step 1. prepare
       function (callback) {
-         //TODO: do all preps, if any
+         // do all preps, if any, here
          solrClient.autoCommit = false;
          t1 = new Date();
          callback();
@@ -31,7 +31,6 @@ async.waterfall(
 
       function(callback) {
          for (var batch = 0; batch < N_BATCHES; batch++) {
-            //FIXME: check here it may be a memory leak
             var vms = [];
             for (var i = 0; i < BATCH_SIZE; i++) {
                vms.push(generator.getVm());

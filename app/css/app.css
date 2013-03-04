@@ -31,6 +31,10 @@
    overflow: auto;
 }
 
+.form-search button {
+   width: 6em;
+}
+
 #query {
     width: 60%;
 }

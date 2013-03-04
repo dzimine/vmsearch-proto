@@ -3,7 +3,7 @@ var Connection = require('cassandra-client').Connection;
 var keyspace = "vmsearch";
 var con = new Connection({host:'127.0.0.1', port:9160, keyspace:keyspace});
 
-//TODO: factor out connect so that I use the same connection.
+//TODO: factor out connect to cache connection.
 //select * from vms where token(key)>token('vm-8679') limit 10;
 exports.getAll = function(req, res, next) {
    con.connect(function(err){
