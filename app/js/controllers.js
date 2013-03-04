@@ -1,5 +1,4 @@
 'use strict';
-
 var NavCtrl = ['$scope', '$location', function ($s, $loc) {
    // Notice an alternative way to trigger injection .
 
@@ -7,14 +6,44 @@ var NavCtrl = ['$scope', '$location', function ($s, $loc) {
       return route === $loc.path();
    };
 
-   //TEMP, for mock data
-   var facetMap= {
-      "Tags"  : ["SolarWinds","Network Monitoring", "Application", "Performance", "Monitor", "Orion", "Management", "Apache", "Video", "Virt", "ESX", "iSCSI", "Cisco", "LAMP", "Production", "Testing", "FIXME" ],
-      "Hosts" : ["host1", "host2", "10.20.30.40", "dzimine-dev-ubuntu"]
-   };
+}];
 
-   //TODO: get from backend
-   $s.facets = [{facet: "Tags", count: 100}, {facet: "Hosts", count:100000}];
+function FacetSolrCtrl($s, $http) {
+   //TEMP, for mock data
+   var facetMap= undefined;
+//   For testing... TODO: move test data to json/facets
+//   {
+//      "tags"  : ["SolarWinds","Network Monitoring", "Application", "Performance", "Monitor", "Orion", "Management", "Apache", "Video", "Virt", "ESX", "iSCSI", "Cisco", "LAMP", "Production", "Testing", "FIXME" ],
+//      "host" : ["host1", "host2", "10.20.30.40", "dzimine-dev-ubuntu"]
+//   };
+
+
+   $s.facets = [{facet: "tags",  label:"Tags"}, {facet: "host", label:"Hosts"}];
+
+
+   function initFacets() {
+      if (!facetMap) {
+         $http.get("solr/facets")
+               .success(function (data) {
+                  facetMap = {};
+                  var tags = [];
+                  for (var i = 1; i < data.tags.length; i += 2) {
+                     tags.push([data.tags[i - 1], data.tags[i]]);
+                  }
+                  facetMap.tags = tags;
+
+                  var host = [];
+                  for (var j = 1; j < data.host.length; j += 2) {
+                     host.push([data.host[j - 1], data.host[j]]);
+                  }
+                  facetMap.host = host;
+
+                  // comment this out for no default selection
+                  // but hide the search results than.
+                  $s.selectFacet($s.facets[0].facet);
+               });
+      }
+   }
 
    $s.selectFacet = function (facet) {
       if (facet == $s.selectedFacet) return;
@@ -22,14 +51,15 @@ var NavCtrl = ['$scope', '$location', function ($s, $loc) {
       $s.facetItems = facetMap[$s.facetSelected];
    };
 
-   $s.selectFacet($s.facets[0].facet);
-
    $s.selectFacetItem = function (item) {
       if (item == $s.facetItemSelected) return;
       $s.facetItemSelected = item;
-   }
+   };
 
-}];
+   initFacets();
+
+} FacetSolrCtrl.$inject = ['$scope', '$http'];
+
 
 function SearchCtrl($s, $http) {
 

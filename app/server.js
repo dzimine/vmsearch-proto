@@ -28,6 +28,7 @@ app.get('/data/vms', cassandra.getAll);
 app.get('/data/vms/:id', cassandra.getById);
 
 app.get('/solr/vms', solr.getAll);
+app.get('/solr/facets', solr.getFacets);
 
 app.listen(port);
 console.log('Express listening on port ' + port);

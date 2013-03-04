@@ -1,10 +1,11 @@
 /**
  *  Solr controller
  */
-
+var http = require('http');
 var solr = require('solr-client');
 
-var solrClient = solr.createClient();
+var solrClient = solr.createClient(
+      { host:'127.0.0.1', port:'7574', core:'', path:'/solr' });
 
 var getAll = exports.getAll = function(req, res, next) {
    var limit= req.query.l ? req.query.l : 100;
@@ -28,9 +29,36 @@ var getAll = exports.getAll = function(req, res, next) {
       }
    });
 };
+/*
+  Solr query: http://localhost:7574/solr/ - base solr path
+      select?indent=on&wt=json&version=2.2 - method and settings
+      &q=*:*&rows=0 - go over all docs, but return zero
+      &facet=true - bring facets
+      &facet.field=host - host field facet
+         &f.host.facet.limit=10 - bring only 10 first
+         &f.host.sort=index - sort by alpha (default by counts)
+      &facet.field=tags" - tags field facet
+      //TODO add parameters for search
+ */
+var getFacets = exports.getFacets = function (req, res, next) {
+   var query = "q=*:*&rows=0&facet=true&facet.field=host&f.host.facet.limit=10&facet.field=tags";
+   solrClient.search(query, function(err, result) {
+      if(err) {
+         next(err);
+      } else {
+         console.log(result.facet_counts.facet_fields);
+         res.json(result.facet_counts.facet_fields);
+      }
+   });
 
-//var rmock = {query:{l:300}};
-//getAll(rmock);
+
+};
+//
+//var reqmock = {query:{l:300}};
+//var resmock = {json: function(data) { console.log(data); }}
+//var nextmock = function(err) { console.log(err); }
+//getFacets(reqmock, resmock, nextmock);
+
 
 
 

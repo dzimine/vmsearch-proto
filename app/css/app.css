@@ -7,7 +7,7 @@
    padding-left: 0;
 }
 
-#f-list .badge {
+.well .badge {
    float:right;
    font-weight: normal;
 }
