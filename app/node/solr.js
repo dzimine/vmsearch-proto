@@ -17,6 +17,11 @@ var getAll = exports.getAll = function(req, res, next) {
 //         .mm(2)
          .start(start)
          .rows(limit);
+   if (req.query.f) {
+      query.matchFilter(req.query.f, req.query.fv);
+      console.log("Addomg facets: ", query);
+   }
+
    console.log("Querying: ", query);
    solrClient.search(query, function(err,result){
       if(err) {
@@ -39,7 +44,8 @@ var getAll = exports.getAll = function(req, res, next) {
       &facet.field=tags" - tags field facet
  */
 var getFacets = exports.getFacets = function (req, res, next) {
-   // TODO:add parameters for search, it's hardcoded.
+   // TODO: add parameters for search, it's hardcoded.
+   // TODO: allow to select facets, it's hardcoded
    var query = "q=*:*&rows=0&facet=true&facet.field=host&f.host.facet.limit=10&facet.field=tags";
    solrClient.search(query, function(err, result) {
       if(err) {

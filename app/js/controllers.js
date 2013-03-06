@@ -9,7 +9,7 @@ var NavCtrl = ['$scope', '$location', function ($s, $loc) {
 
 }];
 
-function FacetSolrCtrl($s, $http) {
+function SearchSolrCtrl($s, $http) {
 
    var facetMap= undefined;
 //   For testing... TODO: move test data to json/facets
@@ -20,48 +20,90 @@ function FacetSolrCtrl($s, $http) {
 
    $s.facets = [{facet: "tags",  label:"Tags"}, {facet: "host", label:"Hosts"}];
 
-
    function initFacets() {
       if (!facetMap) {
-         $http.get("solr/facets")
+         var facets = {};
+         for (var fi = 0; fi < $s.facets.length; fi++) {
+            facets[$s.facets[fi].facet] = '';
+            //MAYBE pass limits along with facet name, to limit on backend
+         }
+
+         $http.get("solr/facets", { params: facets })
                .success(function (data) {
                   facetMap = {};
-                  var tags = [];
-                  for (var i = 1; i < data.tags.length; i += 2) {
-                     tags.push([data.tags[i - 1], data.tags[i]]);
+                  for (var f in facets) {
+                     if (facets.hasOwnProperty(f)) {
+                        var pairs = [];
+                        for (var i = 1; i < data[f].length; i += 2) {
+                           pairs.push([data[f][i - 1], data[f][i]]);
+                        }
+                        facetMap[f] = pairs;
+                     }
                   }
-                  facetMap.tags = tags;
-
-                  var host = [];
-                  for (var j = 1; j < data.host.length; j += 2) {
-                     host.push([data.host[j - 1], data.host[j]]);
-                  }
-                  facetMap.host = host;
-
                   // comment this out for no default selection
-                  // but hide the search results than.
-                  $s.selectFacet($s.facets[0].facet);
+                  // but hide the 'filter' div than.
+                  $s.onSelectFacet($s.facets[0].facet);
                });
       }
    }
 
-   $s.selectFacet = function (facet) {
-      if (facet == $s.selectedFacet) return;
+   function reset() {
+      $s.searchResults = [];
+      $s.limit = 20;
+      $s.start = 0;
+      $s.moreResults = false;
+   }
+
+   function fetch (){
+      var t1 = new Date();
+      $s.searchStatus = "Searching...";
+      var params = {"k":$s.start, "l":$s.limit, "q": $s.query};
+      if ($s.facetValueSelected) {
+         params["f"] = $s.facetSelected;
+         params["fv"] = $s.facetValueSelected;
+      }
+
+      $http.get("solr/vms", {params: params })
+            .success(function(res) {
+               var rows = res.docs;
+               $s.searchResults = $s.searchResults.concat(rows);
+               $s.start += rows.length;
+               $s.moreResults = $s.limit <= rows.length;
+               $s.searchStatus = res.numFound
+                     + " matches in " + (new Date() - t1) + " ms";
+            });
+   }
+
+   //On load;
+   // MAYBE: is it better to bring facets on the first query.
+   initFacets();
+   reset();
+   fetch();
+
+   $s.onSelectFacet = function (facet) {
+      if (facet == $s.facetSelected) return;
       $s.facetSelected = facet;
       $s.facetItems = facetMap[$s.facetSelected];
    };
 
-   $s.selectFacetItem = function (item) {
-      if (item == $s.facetItemSelected) return;
-      $s.facetItemSelected = item;
+   $s.onSelectFacetValue = function (val) {
+      $s.facetValueSelected = (val == $s.facetValueSelected) ? null : val;
+      reset();
+      fetch();
    };
 
-   initFacets();
+   $s.onLoadMore = function () {
+      fetch();
+   };
 
-} FacetSolrCtrl.$inject = ['$scope', '$http'];
+   $s.onSearch = function () {
+      reset();
+      fetch();
+   };
 
+} SearchSolrCtrl.$inject = ['$scope', '$http'];
 
-function SearchCtrl($s, $http) {
+function SearchCassCtrl($s, $http) {
 
    $s.searchResults=[];
    $s.limit = 100;
@@ -81,7 +123,7 @@ function SearchCtrl($s, $http) {
    //On load
    fetch("data/vms");
 
-   $s.loadMore = function () {
+   $s.onLoadMore = function () {
       fetch("data/vms");
    };
 
@@ -94,43 +136,8 @@ function SearchCtrl($s, $http) {
    //TODO-MAYBE: consider more on scroll, like here http://jsfiddle.net/vojtajina/U7Bz9/
 }
 // Force Inject to handle minimizer and use any params in controller sig.
-SearchCtrl.$inject = ['$scope', '$http'];
+SearchCassCtrl.$inject = ['$scope', '$http'];
 
-function SearchSolrCtrl($s, $http) {
 
-   function ready() {
-      $s.searchResults = [];
-      $s.limit = 50;
-      $s.start = 0;
-      $s.moreResults = false;
-   }
-
-   function fetch (url){
-      var t1 = new Date();
-      $http.get(url, {params: {"k":$s.start, "l":$s.limit, q: $s.query} })
-            .success(function(res) {
-               var rows = res.docs;
-               $s.searchResults = $s.searchResults.concat(rows);
-               $s.start += rows.length;
-               $s.moreResults = $s.limit <= rows.length;
-               $s.numFound = res.numFound;
-               $s.elapsedTime = new Date() - t1;
-            });
-   }
-
-   //On load;
-   ready();
-   fetch("solr/vms");
-
-   $s.loadMore = function () {
-      fetch("solr/vms");
-   };
-
-   $s.onSearch = function () {
-      ready();
-      fetch("solr/vms");
-   };
-
-} SearchSolrCtrl.$inject = ['$scope', '$http'];
 
 

@@ -60,34 +60,10 @@
 
 <div class="container-fluid" >
 
-   <!-- Angular views GO HERE -->
-   <div class="row-fluid">
-
-      <div class="span3">
-         <div class="well" ng-controller="FacetSolrCtrl">
-            <div id="f-header" class="nav-header">Facets</div>
-            <div id="f-list">
-               <ul class="nav nav-pills nav-stacked">
-                  <li ng-repeat="f in facets" ng-class="{'active': f.facet==facetSelected}">
-                     <a ng-click="selectFacet(f.facet)">{{f.label}}</a>
-                  </li>
-               </ul>
-            </div>
-            <div class="nav-header">{{facetSelected}}</div>
-            <form>
-            <input id="nav-filter" type="text" placeholder="filter..." class="search-query input-small" />
-            <div id="f-results">
-               <ul class="nav nav-list" ng-model="facetItemSelected">
-               <li ng-repeat="i in facetItems" ng-class="{'active': i==facetItemSelected}" >
-                  <a ng-click="selectFacetItem(i)">{{i[0]}}<span class="badge">{{i[1]}}</span></a></li>
-               </ul>
-            </div>
-            </form>
-         </div>
-      </div><!--span2-->
-
-      <div class="span9" ng-view></div>
+   <div class="row-fluid" ng-view>
+      <!-- Angular views GO HERE -->
    </div>
+
    <hr>
 
    <footer>

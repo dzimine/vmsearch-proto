@@ -1,21 +1,53 @@
-
-<form class="form-search" ng-submit="onSearch()">
-   <!-- TODO: add image -->
-   <input type="text" id="query" ng-model="query" class="input-medium search-query" placeholder="Search...">
-   <button type="submit" class="btn btn-primary" ><i class="icon-search icon-white"></i></button>
-   <span class="pull-right">{{numFound}} records in {{elapsedTime}} milliseconds</span>
-</form>
-
-<hr>
-<ul class="unstyled">
-   <!-- Mock vms go here -->
-</ul>
-<ul class="unstyled">
-   <li ng-repeat="r in searchResults">
-      <div class="search-result"><h5><a>{{r.name}}</a></h5>
-         <pre>{{ r }}</pre>
+<div class="span3">
+   <div class="well">
+      <div id="f-header" class="nav-header">Facets</div>
+      <div id="f-list">
+         <ul class="nav nav-pills nav-stacked">
+            <li ng-repeat="f in facets"
+                ng-class="{'active': f.facet==facetSelected}">
+               <a ng-click="onSelectFacet(f.facet)">{{f.label}}</a>
+            </li>
+         </ul>
       </div>
-   </li>
-</ul>
+      <div class="nav-header">{{facetSelected}}</div>
+      <form>
+         <input id="nav-filter" type="text" placeholder="filter..."
+                class="search-query input-small"/>
 
-<p class="lead" ng-show="moreResults"><a ng-click="loadMore()"><strong>Next {{limit}} ...</strong></a></p>
+         <div id="f-results">
+            <ul class="nav nav-list" ng-model="facetItemSelected">
+               <li ng-repeat="i in facetItems"
+                   ng-class="{'active': i[0]==facetValueSelected}">
+                  <a ng-click="onSelectFacetValue(i[0])">{{i[0]}}<span class="badge">{{i[1]}}</span></a>
+               </li>
+            </ul>
+         </div>
+      </form>
+   </div>
+</div><!--span3-->
+
+<div class="span9">
+   <form class="form-search" ng-submit="onSearch()">
+      <!-- TODO: add image -->
+      <input type="text" id="query" ng-model="query"
+             class="input-medium search-query" placeholder="Search...">
+      <button type="submit" class="btn btn-primary"><i
+              class="icon-search icon-white"></i></button>
+      <span class="pull-right">{{searchStatus}}</span>
+   </form>
+
+   <hr>
+   <ul class="unstyled">
+      <!-- Mock vms go here -->
+   </ul>
+   <ul class="unstyled">
+      <li ng-repeat="r in searchResults">
+         <div class="search-result"><h5><a>{{r.name}}</a></h5>
+            <pre>{{ r }}</pre>
+         </div>
+      </li>
+   </ul>
+
+   <p class="lead" ng-show="moreResults"><a ng-click="onLoadMore()"><strong>Next
+      {{limit}} ...</strong></a></p>
+</div><!-- span9 -->
