@@ -9,7 +9,9 @@ var generator = require('./generator');
 var BATCH_SIZE = 100;
 var N_BATCHES  = 100;
 
-var solrClient = solr.createClient();
+var solrClient = solr.createClient(
+      { host:'127.0.0.1', port:'8983', core:'', path:'/solr' });
+
 var date=new Date();
 var t1, t2;
 

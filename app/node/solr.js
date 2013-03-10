@@ -5,7 +5,7 @@ var http = require('http');
 var solr = require('solr-client');
 
 var solrClient = solr.createClient(
-      { host:'127.0.0.1', port:'7574', core:'', path:'/solr' });
+      { host:'127.0.0.1', port:'8983', core:'', path:'/solr' });
 
 var getAll = exports.getAll = function(req, res, next) {
    var limit= req.query.l ? req.query.l : 100;
