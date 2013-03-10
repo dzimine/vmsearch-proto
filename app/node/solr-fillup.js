@@ -6,8 +6,8 @@ var solr = require('solr-client');
 var async = require('async');
 var generator = require('./generator');
 
-var BATCH_SIZE = 1000;
-var N_BATCHES  = 1000;
+var BATCH_SIZE = 100;
+var N_BATCHES  = 100;
 
 var solrClient = solr.createClient();
 var date=new Date();
