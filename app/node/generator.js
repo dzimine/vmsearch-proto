@@ -76,7 +76,7 @@ function generateHostName() {
 
 
 function randomFrom(array) {
-   return array[randomInt(array.length - 1)];
+   return array[randomInt(array.length)-1];
 }
 
 function powerState() {

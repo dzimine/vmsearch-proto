@@ -931,11 +931,13 @@
         is added to the index.  It's used either to index the same field differently,
         or to add multiple fields to the same field for easier/faster searching.  -->
 
-   <copyField source="name" dest="strings"/>
-   <copyField source="host" dest="strings"/>
-   <copyField source="ip" dest="strings"/>
-   <copyField source="tags" dest="strings"/>
-   <copyField source="notes" dest="text" maxChars="3000"/>
+   <copyField source="name" dest="text"/>
+   <copyField source="host" dest="text"/>
+   <copyField source="ip" dest="text"/>
+   <copyField source="tags" dest="text"/>
+   <copyField source="user" dest="text" />
+   <copyField source="project" dest="text" />
+   <copyField source="notes" dest="text" maxChars="512"/>
 
    <!-- DZ: This must work to full-text search unknown fields,
    but probably I am doing something wrong. Indexed search works ok,

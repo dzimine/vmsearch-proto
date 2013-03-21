@@ -14,6 +14,8 @@ echo Launching Solr and sleeping $SOLR_START_TIME sec to get it started...
 nohup $BASE_DIR/../scripts/solr-run.sh >solr.out 2>&1 &
 sleep $SOLR_START_TIME
 
+$BASE_DIR/../scripts/solr-delete.sh
+
 $BASE_DIR/../scripts/solr-post.sh $BASE_DIR/../app/json/vms/vms.json
 
 RECORDS=`curl --silent 'http://localhost:8983/solr/collection1/select?q=*%3A*&fl=name&wt=csv&indent=true' | wc -l`

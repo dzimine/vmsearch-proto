@@ -16,7 +16,7 @@ var getAll = exports.getAll = function(req, res, next) {
          .start(start)
          .rows(limit);
    if (req.query.f) {
-      query.matchFilter(req.query.f, req.query.fv);
+      query.matchFilter(req.query.f, '"'+req.query.fv+'"');
    }
 
    console.log("Querying: ", query);
