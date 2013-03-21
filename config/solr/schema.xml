@@ -894,16 +894,20 @@
    -->
 
    <field name="id" type="string" indexed="true" stored="true" required="true" />
-	<field name="name" type="string" indexed="true" stored="true" required="true" />
-	<field name="host" type="string" indexed="true" stored="true" required="true" />
-	<field name="ip" type="string" indexed="true" stored="true" multiValued="true" />
-	<field name="power" type="string" indexed="true" stored="true" required="true" />
-	<field name="health" type="int" indexed="true" stored="true" />
-	<field name="notes" type="text_general" indexed="true" stored="true" />
-	<field name="tags"  type="string" indexed="true" stored="true" multiValued="true" />
-	<field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false" />
+   <field name="name" type="string" indexed="true" stored="true" required="true" />
+   <field name="host" type="string" indexed="true" stored="true" required="true" />
+   <field name="ip" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="power" type="string" indexed="true" stored="true" required="true" />
+   <field name="user" type="string" indexed="true" stored="true" required="true" />
+   <field name="project" type="string" indexed="true" stored="true" required="true" />
+   <field name="guest_os" type="string" indexed="true" stored="true" required="false" />
+   <field name="image" type="string" indexed="true" stored="true" required="true" />
+   <field name="health" type="int" indexed="true" stored="true" />
+   <field name="notes" type="text_general" indexed="true" stored="true" />
+   <field name="tags"  type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false" />
    <field name="strings" type="string" indexed="true" stored="false" multiValued="true" />
-	<field name="text" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="text" type="text_general" indexed="true" stored="false" multiValued="true" />
 
    <!-- DZ: This indexes and stores all unknown fields -->
    <dynamicField name="*" type="text_general" indexed="true" stored="true" mutliVauled="true" />

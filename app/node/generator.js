@@ -4,6 +4,10 @@
 var lorem = require('./loremipsum');
 
 var tagList = ["SolarWinds","Network Monitoring", "Application", "Performance", "Monitor", "Orion", "Management", "Apache", "Video", "Virt", "ESX", "iSCSI", "Cisco", "LAMP", "Production", "Testing", "FIXME" ];
+var guestOsList = ["Windows 8", "Windows Server 2012", "Ubuntu 10.04 Server", "Red Hat Enterprise Linux 6", "CentOS 6.3"];
+var imageList = ["m1.tiny", "m1.small", "m1.medium", "m1.large", "m1.jumbo"];
+var userNameList = ["Dmitri Zimine", "Arie Branson", "Salley Hankins", "Marla Ebright", "Graham Cottone", "Marvin Harriott", "Shenika Benedetti", "Laure Chenail", "Abram Cole", "Demetrius Aybar", "Jonie Sigmund", "Grady Laduke", "Dalton Nowlen", "Ty Plaisance", "Tina Holiman", "Barrie Frazier", "Wilhelmina Kamm", "Alysia Hardegree", "Dong Custis", "Teodora Burroughs", "Mignon Peskin", "Flora Nogle", "Tammara Peachey", "Jina Carrel", "Ruthie Torbett", "Asa Dyal", "Reina Foss", "Pauline Pugsley", "Sirena Linzy", "Trudie Mirabito", "Evie Gholston", "Kasie Woltman", "Luetta Saari", "Cara Boruff", "Miles Rathjen", "Zelda Dimmitt", "Freida Finkbeiner", "Cherry Lowman", "Estefana Tolleson", "Cathi Gonser", "Debroah Sheets", "Ivette Ali", "Tonya Robb", "Leesa Vandever", "Karin Williford", "Tracie Luedke", "Asia Ricard", "Majorie Sartori", "Melaine Murray", "Velma Rebello", "Shavon Bohner"];
+var projectList = ["Birmingham", "Anchorage", "Phoenix", "Little Rock", "Los Angeles", "Denver", "Bridgeport", "Wilmington", "Jacksonville", "Atlanta", "Honolulu", "Boise", "Chicago", "Indianapolis", "Des Moines", "Wichita", "Louisville", "New Orleans", "Portland", "Baltimore", "Boston", "Detroit", "Minneapolis", "Jackson", "Kansas City", "Billings", "Omaha", "Las Vegas", "Machester", "Newark", "Albuquerque", "New York", "Charlotte", "Fargo", "Columbus", "Oklahoma", "City", "Portland", "Philadelphia", "Providence", "Columbia", "Sioux Falls", "Memphis", "Houston", "Salt Lake City", "Burlington", "Virginia Beach", "Seattle", "Charleston", "Milwaukee", "Cheyenne"];
 
 var MAX_VMS_PER_HOST = 10;
 
@@ -17,10 +21,11 @@ var getVm = exports.getVm = function() {
       vm.ip.push(generateIp());
    }
    vm.power = powerState();
-   //TODO: mix up User and Project, to get N vm per user, M per project.
-   vm.user = "Knight";
-   vm.project = "Tenant 1";
+   vm.user = randomFrom(userNameList);
+   vm.project = randomFrom(projectList);
    vm.host = generateHostName();
+   vm.guest_os = randomFrom(guestOsList);
+   vm.image = randomFrom(imageList);
    vm.health = generateHealth();
    vm.storage_total = 10;
    vm.storage_use = 10 - randomInt(10);
@@ -67,6 +72,11 @@ function generateHostName() {
    }
    vmsOnThisHost++;
    return hostname;
+}
+
+
+function randomFrom(array) {
+   return array[randomInt(array.length - 1)];
 }
 
 function powerState() {

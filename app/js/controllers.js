@@ -10,32 +10,33 @@ var NavCtrl = ['$scope', '$location', function ($s, $loc) {
 }];
 
 function SearchSolrCtrl($s, $http) {
+   //   Facet Definition (getting from backend). Format:
+   //   $s.facets = [
+   //       {facet: "tags", label: "Tags", count: 2},
+   //       {facet: "host", label: "Hosts", count: 4},
+   //    ];
+   $s.facets = undefined;
 
+   //   Facet map (getting from backend, transformed to array of facet:counter pairs). Format:
+   //   facetMap = {
+   //      "tags"  : [["SolarWinds",10],["Network Monitoring",20]],
+   //      "host" : [["host1",10], ["host2",3] ["10.20.30.40",5], ["dzimine-dev-ubuntu",11]
+   //   };
    var facetMap= undefined;
-//   For testing... TODO: move test data to json/facets
-//   {
-//      "tags"  : ["SolarWinds","Network Monitoring", "Application", "Performance", "Monitor", "Orion", "Management", "Apache", "Video", "Virt", "ESX", "iSCSI", "Cisco", "LAMP", "Production", "Testing", "FIXME" ],
-//      "host" : ["host1", "host2", "10.20.30.40", "dzimine-dev-ubuntu"]
-//   };
-
-   $s.facets = [{facet: "tags",  label:"Tags"}, {facet: "host", label:"Hosts"}];
 
    function initFacets() {
       if (!facetMap) {
-         var facets = {};
-         for (var fi = 0; fi < $s.facets.length; fi++) {
-            facets[$s.facets[fi].facet] = '';
-            //MAYBE pass limits along with facet name, to limit on backend
-         }
-
-         $http.get("solr/facets", { params: facets })
-               .success(function (data) {
+         $http.get("solr/facets")
+               .success(function (res) {
+                  $s.facets = res.facets;
+                  var data = res.fields;
                   facetMap = {};
-                  for (var f in facets) {
-                     if (facets.hasOwnProperty(f)) {
+                  for (var i1 = 0; i1 < $s.facets.length; i1++) {
+                     var f = $s.facets[i1].facet;
+                     if (data.hasOwnProperty(f)) {
                         var pairs = [];
-                        for (var i = 1; i < data[f].length; i += 2) {
-                           pairs.push([data[f][i - 1], data[f][i]]);
+                        for (var i2 = 1; i2 < data[f].length; i2 += 2) {
+                           pairs.push([data[f][i2 - 1], data[f][i2]]);
                         }
                         facetMap[f] = pairs;
                      }

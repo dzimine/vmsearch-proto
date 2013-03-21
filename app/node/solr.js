@@ -10,16 +10,13 @@ var solrClient = solr.createClient(
 var getAll = exports.getAll = function(req, res, next) {
    var limit= req.query.l ? req.query.l : 100;
    var start = req.query.k ? req.query.k : 0;
-   var qs =   req.query.q ? req.query.q : "*";
+   var qs =   req.query.q ? req.query.q : "*:*";
    var query = solrClient.createQuery()
          .q(qs)
-//         .dismax()
-//         .mm(2)
          .start(start)
          .rows(limit);
    if (req.query.f) {
       query.matchFilter(req.query.f, req.query.fv);
-      console.log("Addomg facets: ", query);
    }
 
    console.log("Querying: ", query);
@@ -33,31 +30,55 @@ var getAll = exports.getAll = function(req, res, next) {
       }
    });
 };
-/*
-  Solr query: http://localhost:7574/solr/ - base solr path
-      select?indent=on&wt=json&version=2.2 - method and settings
-      &q=*:*&rows=0 - go over all docs, but return zero
-      &facet=true - bring facets
-      &facet.field=host - host field facet
-         &f.host.facet.limit=10 - bring only 10 first
-         &f.host.sort=index - sort by alpha (default by counts)
-      &facet.field=tags" - tags field facet
+
+var facets = [
+   {facet: "tags", label: "Tags", count: 10},
+   {facet: "host", label: "Hosts", count: 10},
+   {facet: "user", label: "Users", count: 20},
+   {facet: "project", label: "Projects", count: 20},
+   {facet: "image", label: "Image"},
+   {facet: "power", label: "Power"}
+];
+
+function buildFacetFieldsQuery() {
+    var params = ["facet=true"];
+    for (var i = 0; i < facets.length; i++) {
+       var f = facets[i];
+       params.push("facet.field=" + f.facet);
+       if (f.count) {
+          params.push("f." + f.facet + ".facet.limit=" + f.count);
+       }
+    }
+    return params.join("&");
+}
+
+/**
+ * Solr query: http://localhost:7574/solr/ - base solr path
+ *     select?indent=on&wt=json&version=2.2 - method and settings
+ *     &q=*:*&rows=0 - go over all docs, but return zero
+ *     &facet=true - bring facets
+ *     &facet.field=host - host field facet
+ *        &f.host.facet.limit=10 - bring only 10 first
+ *        &f.host.sort=index - sort by alpha (default by counts)
+ *     &facet.field=tags" - tags field facet
  */
 var getFacets = exports.getFacets = function (req, res, next) {
-   // TODO: add parameters for search, it's hardcoded.
-   // TODO: allow to select facets, it's hardcoded
-   var query = "q=*:*&rows=0&facet=true&facet.field=host&f.host.facet.limit=10&facet.field=tags";
+   var query = solrClient.createQuery()
+      .q("*:*")
+      .rows(0)
+      .set(buildFacetFieldsQuery());
+   console.log("Querying: ", query);
    solrClient.search(query, function(err, result) {
       if(err) {
          next(err);
       } else {
-         console.log(result.facet_counts.facet_fields);
-         res.json(result.facet_counts.facet_fields);
+         res.json({ facets: facets, fields: result.facet_counts.facet_fields });
       }
    });
 
 
 };
+
 //
 //var reqmock = {query:{l:300}};
 //var resmock = {json: function(data) { console.log(data); }}
