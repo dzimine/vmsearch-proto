@@ -107,9 +107,9 @@ If we need both Solr and Cassandra, ES, or a custom solution, or look at Elastic
 
 # References
 
-[gbp]: (http://kkovacs.eu/cassandra-vs-mongodb-vs-couchdb-vs-redis)
-[HBvCass]: http://ria101.wordpress.com/2010/02/24/hbase-vs-cassandra-why-we-moved/
-[Ebay]: http://www.ebaytechblog.com/2012/08/14/cassandra-data-modeling-best-practices-part-2/
-[RightSol]: http://www.infoq.com/articles/perera-data-storage-haystack
+* [gbp](http://kkovacs.eu/cassandra-vs-mongodb-vs-couchdb-vs-redis)
+* [HBvCass](http://ria101.wordpress.com/2010/02/24/hbase-vs-cassandra-why-we-moved/)
+* [Ebay](http://www.ebaytechblog.com/2012/08/14/cassandra-data-modeling-best-practices-part-2/)
+* [RightSol](http://www.infoq.com/articles/perera-data-storage-haystack)
 
 
