@@ -80,11 +80,13 @@ Backend: node.js, express.js, node-cassandra-client, solr-client
 * installed, defined  schema, filled docs in batches, query as you please.
 * 1,000,000 docs inserted in 1.5 sec!!!
 * Data disk footprint - 0.5G ( {$solr-home}/solr/data)
+* Memory footprint 170Mb empty, 290Mb with 1M data, after few searches
 * excellent for any search (learn types, schema, and query syntax)
 * may work for structure, too (check Solandra Reuter's demo!)
-*  used as app, but typically it's embedded in Java app
+* used as app, but typically it's embedded in Java app
 * may be gives little on top of Lucene, should we use Lucene directly?
-* no [good] replication, no availability story. Look at SolrCloud, and be aware of  Solandra (below)
+* ~~no [good] replication, no availability story.~~ Look at SolrCloud, and be aware of  Solandra (below)
+  * SolrCloud - Solr 4x - gives partitioning, availability and replication, tested, it works. The prototype is switched to use it.
 
 
 ## Solandra and DataStrax Enterprise Search 
@@ -94,13 +96,14 @@ If we only need Solr, Solandra would do.
 If we need both Solr and Cassandra, ES, or a custom solution, or look at ElasticSearch
 
 # Next Steps
-* Clean-up code for sharing
-* Code and info sharing: Github? What else?
 * Look at OpenStack & clarify assumption about System Under Management: integration points, infrastructure available (e.g. message bus), how to browse/get data/change, where to place agents.
 * Beef up UI to learn Solr and Cassandra's limits. Browse (vm on host), Facets (power-on, tags), search
-* Look at SolrClout and ElasticSearch
+* ~~Look at SolrClout~~ (done, like, switched to use it)
+* Closer look at [ElasticSearch] (http://www.elasticsearch.org/) 
+  * we can switch implementation later, they're conceptually the same.
 * "Live data" simulation: rapidly update data
-* Try Cassandra "crash" and restore scenarios.
+* ~~Try Cassandra "crash" and restore scenarios.~~ forget Cassandra for now. It's no good for relations. May return to it for time series.
+* Crash scenario: deploy simulation on multiple nodes, crash one node, see that it continues to work. 
 
 # References
 
