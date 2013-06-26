@@ -4,7 +4,7 @@ var cassandra = require('./node/cassandra');
 var solr = require('./node/solr');
 
 var app = express();
-var port = 9000;
+var port = 9001;
 
 
 //body parser next, so we have req.body

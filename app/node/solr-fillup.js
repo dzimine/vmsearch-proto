@@ -6,63 +6,80 @@ var solr = require('solr-client');
 var async = require('async');
 var generator = require('./generator');
 
-var BATCH_SIZE = 100;
+var BATCH_SIZE = 10000;
 var N_BATCHES  = 100;
+
 
 var solrClient = solr.createClient(
       { host:'127.0.0.1', port:'8983', core:'', path:'/solr' });
 
-var date=new Date();
 var t1, t2;
+t1 = new Date();
 
-async.waterfall(
-   [
-      // Step 1. prepare
-      function (callback) {
-         // do all preps, if any, here
-         solrClient.autoCommit = false;
-         t1 = new Date();
-         callback();
-      },
+solrClient.autoCommit = false;
 
-      // Step 2. load data in batches, in parallel
-      // Strange: Despite the Solr error
-      // message: 'HTTP status 503.Reason: Error opening new searcher. exceeded limit of maxWarmingSearchers=2, try again later.' }
-      // solrClient.add didn't set err, and all 100 000 records got created.
-      // TODO: consider eachLimit to make sure we don't pile up too much.
-
-      function(callback) {
-         for (var batch = 0; batch < N_BATCHES; batch++) {
-            var vms = [];
-            for (var i = 0; i < BATCH_SIZE; i++) {
-               vms.push(generator.getVm());
-            }
-            solrClient.add(vms, callback);
-         }
-      }
-   ],
-   // Step3. Commit on success, or roll-back on error(s), for each batch.
-   function (err, res) {
-      if(err) {
-         console.log(err);
-         solrClient.rollback();
-         return;
-      }
-
-      if(!res) {
-         console.log("WARN: no result when no error");
-      }
-      console.log(res, "committing... ");
-      solrClient.commit(function(err, res) {
-         if (err) {
-            console.log(err);
-         } else {
-            t2 = new Date();
-            console.log(res, " done! ", (t2-t1)/1000, ' sec');
-         }
-      });
-   }
+var count = 0;
+async.whilst(
+  function () { return count < N_BATCHES; },
+  function (callback) {
+    count++;
+    console.log('Batch #', count);
+    doBatch(callback);
+  },
+  function (err) {
+    if (err) {
+      console.log('Done with errors:', err);
+    } else {
+      console.log('Done!');
+    }
+  }
 );
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper functions
+
+/**
+* Generates a batch of vms and sends it to Solr. Callback is for async. 
+*/
+function doBatch(callback) {
+  var vms = [];
+  for (var i = 0; i < BATCH_SIZE; i++) {
+     vms.push(generator.getVm());
+  }
+  solrClient.add(vms, function (err, res) {
+    //MAYBE: Can pass callback through to commit once.
+    commitOrRollback(err, res, callback);
+  });
+}
+
+/** 
+* Commits or rolls back a batch.
+* passes callback(err) when done - for async
+*/
+function commitOrRollback(err, res, callback) {
+  if(err) {
+     console.log(err);
+     solrClient.rollback();
+     callback(err);
+     return;
+  }
+
+  if(!res) {
+     console.log("WARN: no result when no error");
+  }
+
+  console.log(res, "committing... ");
+  solrClient.commit(function(err, res) {
+     if (err) {
+        console.log(err);
+     } else {
+        t2 = new Date();
+        console.log(res, " done! ", (t2-t1)/1000, ' sec');
+     }
+     callback(err);
+  });
+}
+
 
 
 
