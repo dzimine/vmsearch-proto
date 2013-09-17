@@ -910,8 +910,8 @@
    <field name="text" type="text_general" indexed="true" stored="false" multiValued="true" />
 
    <!-- DZ: This indexes and stores all unknown fields -->
-   <dynamicField name="*" type="text_general" indexed="true" stored="true" mutliVauled="true" />
-
+   <dynamicField name="*" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="_version_" type="long" indexed="true" stored="true"/>
  </fields>
 
  <!-- Field to use to determine and enforce document uniqueness. 

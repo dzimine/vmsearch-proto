@@ -6,8 +6,8 @@ Note: many and all unit tests are from angular-seed project, and not currently u
 * Run $npm install in the project root folder to get nodejs dependencies.
 
 ## Set up Solr (4.x)
-1. Install solr 4.x into $SOLR directory (e.g. /usr/local/solr-4.1.0)
-1. Create vmsearch project by copying $SOLR/example to $SOLR/vmsearch
+1. Install solr 4.x into $SOLR directory (e.g. /usr/local/solr-4.1.0). If installed by homebrew, it ends up in /usr/local/Cellar/solr/4.4.0/
+1. Create vmsearch project by copying $SOLR/example to $SOLR/vmsearch (in homebrew installation it's $SOLR/libexec/example)
 
 		cd $SOLR && cp example vmsearch
 1. Optional: remove unused stuff:
